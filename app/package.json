@@ -1,0 +1,14 @@
+{
+  "name": "express-api",
+  "version": "1.0.0",
+  "description": "simple_web_app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Artem Aleshin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}

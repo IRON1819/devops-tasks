@@ -1,0 +1,39 @@
+
+services:
+  app_1:
+    image: myimage:latest
+    environment:
+      UUID: "11111111.1111.1111.1111.111111111111"
+    ports:
+      - 8000:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/id"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+
+  app_2:
+    image: myimage:latest
+    environment:
+      UUID: "22222222.2222.2222.2222.222222222222"
+    ports:
+      - 8001:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/id"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+
+  app_3:
+    image: myimage:latest
+    environment:
+      UUID: "33333333.3333.3333.3333.333333333333"
+    ports:
+      - 8002:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/id"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+
+

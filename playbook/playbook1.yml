@@ -1,0 +1,53 @@
+---
+- name: Playbook for the first task
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create a new user
+      ansible.builtin.user:
+        state: present
+        name: brickdev
+        password: "{{ password }}"
+        shell: /bin/bash
+
+    - name: Configure the ssh server
+      block:
+        - name: Allow pubkey authentication for the ssh server
+          ansible.builtin.lineinfile:
+            state: present
+            path: /etc/ssh/sshd_config
+            regexp: "[#]*PubkeyAuthentication"
+            line: "PubkeyAuthentication yes"
+            backup: yes 
+
+        - name: Disallow root login for the ssh server
+          ansible.builtin.lineinfile:
+            state: present
+            path: /etc/ssh/sshd_config
+            regexp: "^[#]*(PermitRootLogin) (yes|no|prohibit-password)$" 
+            line: "PermitRootLogin no"
+      notify: Restart the ssh server
+
+    - name: Create a directory before copying files there
+      ansible.builtin.file:
+        state: directory
+        path: /home/brickdev/.ssh/
+        owner: brickdev
+        group: brickdev
+        mode: '0700'
+
+    - name: Copy the pub_key to the brickdev user
+      ansible.builtin.copy:
+        src: pub_key
+        dest: /home/brickdev/.ssh/authorized_keys
+        owner: brickdev
+        group: brickdev
+        mode: '0600'
+
+  handlers:          
+    - name: Restart the ssh server
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
+
